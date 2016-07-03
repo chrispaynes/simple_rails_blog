@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
+
   # returns a list of all posts in descending order
   def index
     @posts = Post.all.order("created_at DESC")
@@ -30,6 +32,13 @@ class PostsController < ApplicationController
     else
       render "edit"
     end
+  end
+
+  def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+
+    redirect_to @post
   end
 
   # finds a post based on its :id
